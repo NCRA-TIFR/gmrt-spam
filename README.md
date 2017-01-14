@@ -33,38 +33,38 @@ Make sure that the following dependencies have been met. If not install, and the
 3. Run the command 'perl install.pl -n'
 
 To quickly get through the AIPS installation:
-> screen 0: <enter>
-> screen 4: <enter>
-> screen 4b: <enter>
-> screen 5: <e.g., your institute name in capitals (no spaces), and enter>
-> screen 5a: <enter>
-> screen 5b: <enter>
-> screen 6: <enter>
-> screen 7: <copy/paste suggested path and enter>
-> screen 8: <2x enter>
-> screen 9: <enter>
-> screen 9B: <enter>
-> screen 11: <2x enter>
-> during installation: <3x enter>
+- screen 0: <enter>
+- screen 4: <enter>
+- screen 4b: <enter>
+- screen 5: <e.g., your institute name in capitals (no spaces), and enter>
+- screen 5a: <enter>
+- screen 5b: <enter>
+- screen 6: <enter>
+- screen 7: <copy/paste suggested path and enter>
+- screen 8: <2x enter>
+- screen 9: <enter>
+- screen 9B: <enter>
+- screen 11: <2x enter>
+- during installation: <3x enter>
 
 4. We will now increase the number of interactive AIPS sessions to 16. Type the following command 'source LOGIN.SH'
 5. Run the following command 'RUN SETPAR' 
 6. Within SETPAR
 
-> 2 <enter>
-> 10 <enter>
-> 16 <enter>
-> -1 <enter>
+- 2 <enter>
+- 10 <enter>
+- 16 <enter>
+- -1 <enter>
 When prompted to enter passsword:
-> AMANAGER <enter>
-> 4 <enter>
+- AMANAGER <enter>
+- 4 <enter>
 
 7. Test AIPS by running aips tv=local.
 8. Press enter in the terminal, and then enter a few test commands i.e.
 
-> 11 <enter>
-> print 2+2 <enter>
-> kleenex <enter>
+- 11 <enter>
+- print 2+2 <enter>
+- kleenex <enter>
 
 ## Install ParselTongue
 
@@ -72,8 +72,8 @@ When prompted to enter passsword:
 2. Run the command 'sh ./configure --prefix=${SPAM_PATH}/ParselTongue --with-obit=${SPAM_PATH}/Obit PYTHON=${PYTHON}'
 *This should return without errors. If it does return with errors, there is most likely to be a problem with the Obit installation. (See below)*
 3. Run the following commands
-> make
-> make install
+- make
+- make install
 
 ## Install SPAM
 
