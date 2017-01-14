@@ -1,0 +1,599 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ParselTongue Cookbook</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="idp4335456"></a><span class="application">ParselTongue</span> Cookbook</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Mark</span> <span class="surname">Kettenis</span></h3><div class="affiliation"><span class="orgname">JIVE<br></span></div></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="#install">1. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#idp4349280">Prerequisites</a></span></dt><dd><dl><dt><span class="sect2"><a href="#idp4354032">SuSE, Redhat, Fedora</a></span></dt><dt><span class="sect2"><a href="#idp4360592">Debian &amp; Ubuntu</a></span></dt><dt><span class="sect2"><a href="#idp4370336">Mac OS X</a></span></dt></dl></dd><dt><span class="sect1"><a href="#idp4388768">Installing <span class="application">Obit</span></a></span></dt><dt><span class="sect1"><a href="#idp4394192">Installing <span class="application">ParselTongue</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="#idp4425280">2. Running <span class="application">ParselTongue</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="#idp4440448">Interactive use</a></span></dt><dt><span class="sect1"><a href="#idp4448576">Scripting</a></span></dt></dl></dd><dt><span class="chapter"><a href="#idp4457296">3. Running AIPS tasks</a></span></dt><dd><dl><dt><span class="sect1"><a href="#idp4496704">Arry-like attributes</a></span></dt><dt><span class="sect1"><a href="#idp4514016">Special attributes</a></span></dt></dl></dd><dt><span class="chapter"><a href="#data">4. Handling <span class="application"><acronym class="acronym">AIPS</acronym></span> data</a></span></dt><dt><span class="chapter"><a href="#idp4578720">5. Wizardry</a></span></dt><dd><dl><dt><span class="sect1"><a href="#idp4583360">Table access</a></span></dt></dl></dd><dt><span class="chapter"><a href="#idp4584800">6. General feautures</a></span></dt><dd><dl><dt><span class="sect1"><a href="#idp4585440">Logging</a></span></dt></dl></dd></dl></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="install"></a>Chapter 1. Installation</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="#idp4349280">Prerequisites</a></span></dt><dd><dl><dt><span class="sect2"><a href="#idp4354032">SuSE, Redhat, Fedora</a></span></dt><dt><span class="sect2"><a href="#idp4360592">Debian &amp; Ubuntu</a></span></dt><dt><span class="sect2"><a href="#idp4370336">Mac OS X</a></span></dt></dl></dd><dt><span class="sect1"><a href="#idp4388768">Installing <span class="application">Obit</span></a></span></dt><dt><span class="sect1"><a href="#idp4394192">Installing <span class="application">ParselTongue</span></a></span></dt></dl></div><p>
+
+Note that in order to use <span class="application">ParselTongue</span>, you need a workstation running a
+UNIX-like operating system with a classic <span class="application"><acronym class="acronym">AIPS</acronym></span> installation,
+<span class="application">Python 2.2</span> or later and
+<span class="application">Obit</span>.  <span class="application"><acronym class="acronym">AIPS</acronym></span> and
+<span class="application">Python</span> will be available on most
+astronomer's desktops (if not, please see your local system
+administrator), but <span class="application">Obit</span> probably isn't.  A
+version of <span class="application">Obit</span> that is known to work with
+<span class="application">ParselTongue</span> is available from <a class="ulink" href="http://www.radionet-eu.org/rnwiki/ParselTongue" target="_top">the <span class="application">ParselTongue</span>
+Wiki</a>.  Most ParselTongue users use
+<span class="application">Linux</span>, but people have installed in
+succesfully on Apple laptops running <span class="application">Mac OS
+X</span> too.
+
+</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4349280"></a>Prerequisites</h2></div></div></div><p>
+Building <span class="application">Obit</span> is by far the biggest hurdle.
+Since Obit depends on some other Open Source software packages getting
+the right packages installed before trying to build
+<span class="application">Obit</span> is crucial.  Unfortunately many
+<span class="application">Linux</span> distributions have been "dumbed down"
+and are missing the crucial development packages necessary for
+building your own software.
+
+</p><p>
+Essential for building Obit are GLib 2.x and GSL (GNU Scientific
+Library) and of course <span class="application">Python</span>.  Optional
+are CFITSIO, FFTW, PGPLOT, XMLRPC and SWIG.  Of these packages you
+almost certainly don't want to install SWIG.  It is only needed if you
+want to change Obit, and if you install the wrong version Obit will
+fail to compile.  You'll need CFITSIO if you want <span class="application">ParselTongue</span> to read FITS
+files directly.  The other packages are only useful if you want to use
+Obit itself.  Instructions on how to install the essential packages on
+various popular systems can be found below.
+
+</p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp4354032"></a>SuSE, Redhat, Fedora</h3></div></div></div><p>
+On these Linux distributions the names of the needed packages are:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>gcc</td></tr><tr><td>glib2</td></tr><tr><td>glib2-devel</td></tr><tr><td>gsl</td></tr><tr><td>gsl-devel</td></tr><tr><td>python</td></tr><tr><td>python-devel</td></tr></table><p>
+
+You see see whether these packages are installed with:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>rpm -q -a</strong></span>
+</pre><p>
+
+and check whether these packages are present in the list.  If they are
+not installed, install them using the package manager that comes with
+your <span class="application">Linux</span> version.
+
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp4360592"></a>Debian &amp; Ubuntu</h3></div></div></div><p>
+On these distributions the names of the needed packages are:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>gcc</td></tr><tr><td>libglib2.0</td></tr><tr><td>libglib2.0-dev</td></tr><tr><td>libgsl0</td></tr><tr><td>libgsl0-dev</td></tr><tr><td>python-2.3 or python-2.4</td></tr><tr><td>python2.3-dev or python-2.4-dev</td></tr></table><p>
+
+(python-2.5 is probably ok too)
+</p><p>
+If you want visibility access from <span class="application">ParselTongue</span>, you'll also need:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>python-numarray</td></tr></table><p>
+</p><p>
+You can see whether these packages are installed with:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>dpkg -l</strong></span>
+</pre><p>
+
+and check whether these packages are present in the list.  If they are
+not installed you can easily install them with apt-get, e.g.:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>apt-get libglib2.0-dev</strong></span>
+</pre><p>
+
+</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp4370336"></a>Mac OS X</h3></div></div></div><p>
+You'll need <span class="application">XCode</span>.
+<span class="application">XCode</span> is part of <span class="application">OS
+X</span>, but usually not installed by default.  You can find
+it on the <span class="application">OS X</span> install DVD, and install it
+from there.
+
+</p><p>
+The easiest way to install the necessary dependencies is by using
+<span class="application">Fink</span> or
+<span class="application">Darwinports</span>.  Make sure you install a
+version suitable for your version of <span class="application">Mac OS
+X</span>.
+
+</p><p>
+For <span class="application">Fink</span> you'll need the following packages:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>glib2</td></tr><tr><td>glib2-dev</td></tr><tr><td>gsl</td></tr></table><p>
+
+I'm not sure the Apple version of <span class="application">Python</span> is
+usable for Obit/<span class="application">ParselTongue</span>.  So I recommend installing:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>python23 or python24</td></tr></table><p>
+
+too (python25 is probably ok too).  If you want direct access to
+visibility data, you'll also need:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>numarray-py23 or numarray-py24</td></tr></table><p>
+
+</p><p>
+To make sure that Obit and <span class="application">ParselTongue</span> use the Fink version of
+<span class="application">Python</span> make sure you set the PYTHON
+environment variable before running configure:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>export PYTHON=/sw/bin/python</strong></span>
+</pre><p>
+
+or
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>setenv PYTHON /sw/bin/python</strong></span>
+</pre><p>
+
+</p><p>
+For OpenDarwin you'll need to install:
+
+</p><table border="0" summary="Simple list" class="simplelist"><tr><td>glib2</td></tr><tr><td>glib2-devel</td></tr><tr><td>gsl</td></tr><tr><td>python24</td></tr><tr><td>numarray</td></tr></table><p>
+
+and set the PYTHON environment variable to
+<code class="filename">/opt/local/bin/python</code> instead.
+
+</p></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4388768"></a>Installing <span class="application">Obit</span></h2></div></div></div><p>
+Once your system has the necessary tools and libraries, building Obit
+is fairly easy.  Just create the directory where you want to install
+Obit and move the source code there.  Then type:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>tar xfz Obit.tar.gz</strong></span>
+<code class="prompt">$</code> <span class="command"><strong>./configure</strong></span>
+<code class="prompt">$</code> <span class="command"><strong>make</strong></span>
+</pre><p>
+
+If any of these steps fail, there probably is a problem with the
+prerequisites mentioned above.
+</p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4394192"></a>Installing <span class="application">ParselTongue</span></h2></div></div></div><p>
+Installing <span class="application">ParselTongue</span> is fairly straightforward.  Full, but generic,
+installation instructions are given in the file
+<code class="filename">INSTALL</code> included in the distribution.  However,
+there is no real need to read them if you follow the instructions
+below.
+
+First unpack the distribution
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>tar xfz parseltongue-1.0.tar.gz</strong></span>
+</pre><p>
+
+and enter the distribution directory
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>cd parseltongue-1.0</strong></span>
+</pre><p>
+
+Now configure and install <span class="application">ParselTongue</span>
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>./configure --with-obit=<em class="replaceable"><code>obit</code></em></strong></span>
+<code class="prompt">$</code> <span class="command"><strong>make</strong></span>
+<code class="prompt">$</code> <span class="command"><strong>make install</strong></span>
+</pre><p>
+
+where <em class="replaceable"><code>obit</code></em> is the location where you
+installed Obit.  Note that the last step will most likely require
+super-user privileges since by default, <span class="application">ParselTongue</span> will be installed in
+<code class="filename">/usr/local</code>.  If you do not have the appropriate
+privileges, replace the first step above by
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>./configure --prefix=<em class="replaceable"><code>prefix</code></em> --with-obit=<em class="replaceable"><code>obit</code></em></strong></span>
+</pre><p>
+
+where <em class="replaceable"><code>prefix</code></em> is the location where you want
+to install <span class="application">ParselTongue</span>.  You might simply use
+<strong class="userinput"><code>--prefix=$HOME</code></strong> to install <span class="application">ParselTongue</span> in your home
+directory.
+</p><p>
+In order to use <span class="application">ParselTongue</span>, it is convenient to add
+<code class="filename"><em class="replaceable"><code>prefix</code></em>/bin</code> to your
+search path.  In general <code class="filename">/usr/local/bin</code> will
+already be there, and if you are lucky <code class="filename">$HOME/bin</code>
+will also be included in your default search path.  If they are not,
+or if you specified a different <em class="replaceable"><code>prefix</code></em>, you
+can add it by issuing the command
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>PATH=$PATH:<em class="replaceable"><code>prefix</code></em>/bin</strong></span>
+</pre><p>
+
+if you use a Bourne shell (<span class="command"><strong>sh</strong></span>,
+<span class="command"><strong>bash</strong></span>) or Korn Shell (<span class="command"><strong>ksh</strong></span>,
+<span class="command"><strong>pdksh</strong></span>).  If you use a C shell
+(<span class="command"><strong>csh</strong></span>, <span class="command"><strong>tcsh</strong></span>), the equivalent
+command is
+
+</p><pre class="screen">
+<code class="prompt">$ </code> <span class="command"><strong>setenv PATH $PATH:<em class="replaceable"><code>prefix</code></em>/bin</strong></span>
+</pre><p>
+
+You might want to add these commands to your
+<code class="filename">.profile</code> or <code class="filename">.login</code>.
+</p></div></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4425280"></a>Chapter 2. Running <span class="application">ParselTongue</span></h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="#idp4440448">Interactive use</a></span></dt><dt><span class="sect1"><a href="#idp4448576">Scripting</a></span></dt></dl></div><p>
+Before running <span class="application">ParselTongue</span>, make sure you have sourced yous <span class="application"><acronym class="acronym">AIPS</acronym></span> login
+script.  Banana addicts will probably do this automatically as part of
+their <code class="filename">.profile</code> or <code class="filename">.login</code>,
+but otherwise you should do it manually.  If
+<em class="replaceable"><code>aips-root</code></em> is the root of your <span class="application"><acronym class="acronym">AIPS</acronym></span>
+installation, issue the command
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>. <em class="replaceable"><code>aips-root</code></em>/LOGIN.SH</strong></span>
+</pre><p>
+
+if you use a Bourne shell (<span class="command"><strong>sh</strong></span>,
+<span class="command"><strong>bash</strong></span>) or Korn Shell (<span class="command"><strong>ksh</strong></span>,
+<span class="command"><strong>pdksh</strong></span>).  If you use a C shell
+(<span class="command"><strong>csh</strong></span>, <span class="command"><strong>tcsh</strong></span>), the equivalent
+command is
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>source <em class="replaceable"><code>aips-root</code></em>/LOGIN.CSH</strong></span>
+</pre><p>
+
+Again, you might want to add this to your
+<code class="filename">.profile</code> or <code class="filename">.login</code> if you
+find yourself using <span class="application">ParselTongue</span> regularly.
+</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4440448"></a>Interactive use</h2></div></div></div><p>
+While <span class="application">ParselTongue</span> is primarily intended as a scripting environment, you can
+also use it by starting an interactive Python interpreter.  The
+command <span class="command"><strong>ParselTongue</strong></span> will do this for you.  It will
+ask you for your <span class="application"><acronym class="acronym">AIPS</acronym></span> number, and come back to you with the standard
+Python prompt
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>ParselTongue</strong></span>
+Python 2.3.4 (#1, Oct  5 2004, 00:17:14) 
+[GCC 3.3.4 (pre 3.3.5 20040809)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+
+Welcome to ParselTongue
+Please enter your AIPS user ID number: <strong class="userinput"><code>666</code></strong>
+<code class="prompt">&gt;&gt;&gt;</code>
+
+</pre><p>
+
+The first time you do this, <span class="application">ParselTongue</span> might take some time to get back to
+you as it goes over your <span class="application"><acronym class="acronym">AIPS</acronym></span> installation to determine what tasks
+and adverbs are available.  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4448576"></a>Scripting</h2></div></div></div><p>
+The <span class="command"><strong>ParselTongue</strong></span> can also be used to start scripts
+directly from the command line
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>ParselTongue script.py</strong></span>
+</pre><p>
+
+This sets up the required environment variables for <span class="application"><acronym class="acronym">AIPS</acronym></span>, but in
+order to use <span class="application">ParselTongue</span> you'll have to import the <span class="application">ParselTongue</span> modules that you want
+to use.  The following should be enough to be able to use the
+functionality in this cookbook
+
+</p><pre class="programlisting">
+from AIPS import AIPS
+from AIPSTask import AIPSTask, AIPSList
+from AIPSData import AIPSUVData, AIPSImage
+</pre><p>
+
+Of course you are free to import any other Python modules that you
+want.
+
+Because you are not running <span class="application">ParselTongue</span> interactively it cannot ask you for
+your <span class="application"><acronym class="acronym">AIPS</acronym></span> number so you have to set it in your script
+
+</p><pre class="programlisting">
+AIPS.userno = 666
+</pre><p>
+</p></div></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4457296"></a>Chapter 3. Running AIPS tasks</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="#idp4496704">Arry-like attributes</a></span></dt><dt><span class="sect1"><a href="#idp4514016">Special attributes</a></span></dt></dl></div><p>
+It's best to start of with a simple interactive example:
+</p><div class="informalexample"><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>ParselTongue</strong></span>
+  ...
+Please enter your AIPS user ID number: <strong class="userinput"><code>666</code></strong>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld = AIPSTask('fitld')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.infile = 'FITS:N04C2.IDI'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.outname = 'N04C2'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.outclass = 'UVDATA'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.outdisk = 1</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.outseq = 1</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.go()</strong></span>
+</pre></div><p>
+
+If you like bananas, it should be fairly easy to grasp what this does.
+Indeed these commands will use <span class="command"><strong>FITLD</strong></span> to read in the
+<acronym class="acronym">FITS</acronym>-file <code class="filename">N04C2.IDI</code> from the
+<code class="envar">FITS</code> area, storing it in a work file on
+<acronym class="acronym">AIPS</acronym> disk 1.
+</p><p>
+In the examples given above, the first line constructs a <span class="application">ParselTongue</span><span class="markup">
+</span><span class="application"><acronym class="acronym">AIPS</acronym></span> task object for the <span class="command"><strong>FITLD</strong></span> task.
+That object is an instance of the <code class="classname">AIPSTask</code>
+class.  The lines that follow set several attributes of that task
+abject.  Most of these attributes (in fact all of the attributes in
+this example) would be called adverbs in <acronym class="acronym">AIPS</acronym>.
+</p><p>
+Note that most of the commands in the example are given in lowercase.
+Python is fussy about case.  These days, it is considered rude to
+shout, and ALL-CAPS terminals have pretty much died out, so attributes
+have lowercase names, as do task names.
+</p><p>
+Here is another example
+</p><div class="informalexample"><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean = AIPSTask('imean', version='31DEC03')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inname = 'MANDELBROT'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inclass = 'MANDL'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.indisk = 1</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inseq = 1</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.go()</strong></span>
+IMEAN1: Task IMEAN  (release of 31DEC03) begins
+IMEAN1: Image= MANDELBROT  .MANDL .   1 1   xywind=    1    1  256  256
+IMEAN1: Mean and rms found by fitting peak in histogram:
+IMEAN1: Mean= 1.0863E+00 Rms= 9.3035E-01  **** from histogram
+IMEAN1: Mean and rms found by including all data:
+IMEAN1: Mean= 4.6120E+01 Rms= 9.4276E+01 COUNTS   over     65536 pixels
+IMEAN1: Minimum= 1.0000E+00 at  256  256
+IMEAN1: Skypos: X 0.98828  Y 1.488
+IMEAN1: Maximum= 2.5400E+02 at  157  216
+IMEAN1: Skypos: X -0.17188  Y 1.020
+IMEAN1: returns adverbs to AIPS
+IMEAN1: Appears to have ended successfully
+IMEAN1: jop31        31DEC03 NEW: Cpu=       0.0  Real=       0
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print imean.pixavg, imean.pixstd</strong></span>
+1.08630597591 0.930348217487
+<code class="prompt">&gt;&gt;&gt;</code>
+</pre></div><p>
+
+In this example, we create the task object in a slightly different
+way.  By default, <span class="application">ParselTongue</span> will create task objects for the default
+version of AIPS.  But if you want to use a different version, you can
+say so by adding
+<strong class="userinput"><code>version=<em class="replaceable"><code>version</code></em></code></strong>.
+Now look at the last few lines of the example.  You might not be aware
+of it, but <span class="command"><strong>IMEAN</strong></span> does not only accept inputs, but
+also produces outputs.  After you have run the task, these outputs are
+available as attributes of the task object.  Of course this not just
+applies to <span class="command"><strong>IMEAN</strong></span>, but to any <span class="application"><acronym class="acronym">AIPS</acronym></span> task that
+returns adverbs to <span class="application"><acronym class="acronym">AIPS</acronym></span>.
+</p><p>
+As the examples show, setting scalar and string attributes is simple.
+Too make it even easier, <span class="application">ParselTongue</span> implements range checking on attributes
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.indisk = 10</strong></span>
+Traceback (most recent call last):
+  ...
+ValueError: value '10.0' is out of range for attribute 'indisk'
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inname = 'THIS_STRING_IS_TOO_LONG'</strong></span>
+Traceback (most recent call last):
+  ...
+ValueError: string 'THIS_STRING_IS_TOO_LONG' is too long for attribute 'inname'
+</pre><p>
+
+This makes sure you learn about your mistakes as early as possible and
+not when some task falls over with a possibly misterious error
+message.
+</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4496704"></a>Arry-like attributes</h2></div></div></div><p>
+Setting array-like attributes like <code class="varname">aparm</code> or
+<code class="varname">sources</code> is a bit more complicated.  The problem
+here is that in Python array indices start at 0 instead of 1.  To
+avoid confusion, in <span class="application">ParselTongue</span> the element at index 0 is ignored such that
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>possm.aparm[3] = 0.1</strong></span>
+</pre><p>
+
+indeed sets <code class="varname">APARM(3)</code>.  The element at index 0 will
+contain the value <code class="constant">None</code> and cannot be assigned to
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print possm.aparm</strong></span>
+[None, 0.0, 1.0, 0.0, 1.3, -180.0, 180.0, 0.0, 0.0, 0.0, 0.0]
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>possm.aparm[0] = 0.1</strong></span>
+Traceback (most recent call last):
+  ...
+ValueError: setting element '0' is prohibited
+</pre><p>
+
+Since you cannot assign to the element at index zero, the simple
+minded assignment of Python lists to attributes fails too
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc = [512, 512]</strong></span>
+Traceback (most recent call last):
+  ...
+ValueError: setting element '0' is prohibited
+</pre><p>
+
+Python's support for slicing provides a way out of it
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc[1:] = [512, 512]</strong></span>
+</pre><p>
+
+but there is also a convenience function named
+<code class="function">AIPSList</code> that prepends the
+<code class="constant">None</code> to the list such that the assignment works
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc = AIPSList([512, 512])</strong></span>
+</pre><p>
+
+Note that in both cases the assignment has a small twist in that the
+array attribute is extended with default values up to its original
+length
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print imean.trc</strong></span>
+[None, 512.0, 512.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+</pre><p>
+</p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4514016"></a>Special attributes</h2></div></div></div><p>
+It is good to know that some attributes get special treatment
+
+</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+<code class="varname">infile</code>, <code class="varname">outfile</code>,
+<code class="varname">outprint</code>, <code class="varname">infile2</code>,
+<code class="varname">ofmfile</code>, <code class="varname">boxfile</code>,
+<code class="varname">oboxfile</code>
+</span></dt><dd><p>
+While it possible to specify files by their complete path names since
+the <code class="literal">31DEC02</code> version of <acronym class="acronym">AIPS</acronym>
+there still is a limit on the length of the path name.  And 48
+characters does not leave you with a lot of leg room.  To overcome
+this limitation, <span class="application">ParselTongue</span> allows you to enter path names of arbitrary
+length, as long as the trailing component (the filename itself) does
+not require more than 46 characters.  This works with all versions of
+<span class="application"><acronym class="acronym">AIPS</acronym></span>, even with versions older than <code class="literal">31DEC02</code>.
+
+</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Tip</h3><p>
+If you don't specify an area or directory for the
+<code class="varname">outfile</code> and <code class="varname">outprint</code> attributes,
+<span class="application"><acronym class="acronym">AIPS</acronym></span> will place the output file in seemingly random locations.  If
+you want these files to end up in the directory from where you run
+your script, you can prepend <code class="filename">./</code> to the filename.
+</p></div><p>
+</p></dd><dt><span class="term">
+<code class="varname">indata</code>, <code class="varname">outdata</code>,
+<code class="varname">in2data</code>, <code class="varname">in3data</code>,
+<code class="varname">in4data</code>, <code class="varname">out2data</code>
+</span></dt><dd><p>
+Having to specify all four of name, class, disk and sequence number to
+refer to a work file can be a bit of a pain.  To make life a we bit
+easier, <span class="application">ParselTongue</span> provides these data attributes.  If you have a
+<span class="application">ParselTongue</span><span class="markup"> </span> <span class="application"><acronym class="acronym">AIPS</acronym></span> data object (see <a class="xref" href="#data" title="Chapter 4. Handling AIPS data">Chapter 4, <i>Handling <span class="application"><acronym class="acronym">AIPS</acronym></span> data</i></a>)
+you can use it to set these attributes, which set name, class, disk
+and sequence number in one go.
+</p></dd><dt><span class="term">
+<code class="varname">msgkill</code>
+</span></dt><dd><p>
+<span class="application"><acronym class="acronym">AIPS</acronym></span> can be quite chatty, and in long running scripts it may be
+desirable that only messages about serious problems are displayed.
+<span class="application"><acronym class="acronym">AIPS</acronym></span> itself provides the <span class="command"><strong>MSGKILL</strong></span> pseudoverb and
+<span class="application">ParselTongue</span> gives you the opportunity to set it, either on per-task basis or
+globally as an attribute of the <code class="classname">AIPSTask</code>.
+Unfortunately, setting <span class="command"><strong>MSGKILL</strong></span> has the drawback
+that suppressed messages are forever lost and <span class="application"><acronym class="acronym">AIPS</acronym></span> discourages you
+from using it.  However, in <span class="application">ParselTongue</span> you can set the
+<code class="varname">msgkill</code> attribute to a negative value.  This will
+prevent messages from being displayed on the terminal, as if you set
+<span class="command"><strong>MSGKILL</strong></span> to the absolute value of the attribute, but
+the suppressed messages will still go to the <span class="application"><acronym class="acronym">AIPS</acronym></span> message file.
+This way you can always inspect them later if the need arises.
+</p></dd></dl></div><p>
+</p></div></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="data"></a>Chapter 4. Handling <span class="application"><acronym class="acronym">AIPS</acronym></span> data</h1></div></div></div><p>
+Constructing a <span class="application">ParselTongue</span><span class="markup"> </span><span class="application"><acronym class="acronym">AIPS</acronym></span> data object is fairly
+simple, although things are complicated a bit by the fact that <span class="application"><acronym class="acronym">AIPS</acronym></span>
+deals with two kinds of data that are quite different from each other:
+images and UV data.  The latter are created as instances of the
+<code class="classname">AIPSUVData</code> class
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata = AIPSUVData('N04C2', 'UVDATA', 1, 1)</strong></span>
+</pre><p>
+
+whereas the former use the <code class="classname">AIPSImage</code> class
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata = AIPSImage('MANDELBROT', 'MANDL', 1, 1)</strong></span>
+</pre><p>
+
+The syntax is similar in both cases; you specify name, class, disk and
+sequence number of the data.  Here is an example that shows how to use
+the <code class="classname">AIPSImage</code> class to pass an image from one
+task to the other
+
+</p><pre class="programlisting">
+imgdata = AIPSImage('MANELBROT', 'MANDL', 1, 1)
+
+mandl = AIPSTask('mandl')
+mandl.outdata = imgdata
+mandl.go()
+
+imean = AIPSTask('imean')
+imean.indata = imgdata
+imean.go()
+</pre><p>
+
+The <code class="classname">AIPSImage</code> and
+<code class="classname">AIPSUVData</code> classes also provide an interface to
+provide access to <span class="application"><acronym class="acronym">AIPS</acronym></span> data and manipulate it.
+</p><p>
+Manipulation is pretty much limited to deleting extension tables from
+a data set and deleting the data itself.  The latter is a matter of
+calling the method <code class="function">zap()</code> while the former has a
+somewhat more complicated interface:
+
+</p><pre class="programlisting">
+<code class="function">zap_table(<em class="replaceable"><code>type</code></em><em class="replaceable"><code>version</code></em>)</code>
+</pre><p>
+
+here <em class="replaceable"><code>type</code></em> is the type of the extension
+table as a string (e.g. <code class="literal">'CL'</code>) and
+<em class="replaceable"><code>version</code></em> is the version to be deleted.
+Using <code class="literal">0</code> as the <em class="replaceable"><code>version</code></em>
+deletes the highest version of the given type, wheras using
+<code class="literal">-1</code> deletes them all.  So the following example
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata = AIPSUVData('N04C2', 'UVDATA', 1, 1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.zap_table('CL', 0)</strong></span>
+</pre><p>
+
+deletes the last calibration tables from the UV data set
+<code class="literal">N04C2.UVDATA.1</code> on disk 1.  Note that plot files
+(<code class="literal">'PL'</code>) and slice files (<code class="literal">'SL'</code>)
+can also be deleted.  So the following lines
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imgdata = AIPSImage('MANELBROT', 'MANDL', 1, 1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imgdata.zap_table('PL', -1)</strong></span>
+</pre><p>
+
+can be used to throw away all previously made plots.
+</p><p>
+Deleting a complete data set or image is much simpler.  After
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.zap()</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imgdata.zap()</strong></span>
+</pre><p>
+
+the data and image are forever lost.
+</p><p>
+Sometimes an <span class="application"><acronym class="acronym">AIPS</acronym></span> task will fall over and leaves your data in a
+"busy" state.  To recover from this you can use
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.clrstat()</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imgdata.clrstat()</strong></span>
+</pre><p>
+
+but do not do this on data that is being actively used by <span class="application"><acronym class="acronym">AIPS</acronym></span> or
+<span class="application">ParselTongue</span>.
+
+</p><p>
+The interface to access data is much richer though.
+</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4578720"></a>Chapter 5. Wizardry</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="#idp4583360">Table access</a></span></dt></dl></div><p>
+<span class="application">ParselTongue</span> includes a seperate module for manipulating data beyond simple
+inspection of metadata.  It allows full access to <span class="application"><acronym class="acronym">AIPS</acronym></span> tables, and
+access to visibilities an image pixels.
+</p><p>
+The Wizardry functionality has certain limitations.  The most
+important limitation is that access to remote data is not possible;
+only data on the locally visible <span class="application"><acronym class="acronym">AIPS</acronym></span> disks can be accessed.  The
+reason is that the XML-RPC protocol used by <span class="application">ParselTongue</span> for remote execution
+and data access is not suitable for transferring big amounts of data.
+</p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4583360"></a>Table access</h2></div></div></div><p>
+Table access in the Wizardry module is similar to normal table access,
+but adds some functionality to change existing tables and create new
+tables.
+</p></div></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4584800"></a>Chapter 6. General feautures</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="sect1"><a href="#idp4585440">Logging</a></span></dt></dl></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4585440"></a>Logging</h2></div></div></div><p>
+<span class="application">ParselTongue</span> provides a simple, yet powerfull way to capture a log of your
+session.  If you set <code class="varname">AIPS.log</code> to a file object all
+output from <span class="application"><acronym class="acronym">AIPS</acronym></span> tasks will be sent to that object:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>AIPS.log = open('ParselTongue.log', 'a')</strong></span>
+</pre><p>
+
+In fact, the above is not the full truth. <code class="varname">AIPS.log</code>
+does not necessarily have to be a true Python
+<code class="classname">file</code> object; any object with a
+<code class="function">write</code> method will do.
+</p><p>
+The output sent to <code class="varname">AIPS.log</code> includes the messages
+that are not being displayed on your terminal because the
+<code class="varname">msgkill</code> attribute was set to a negative value in
+the task object (this does not apply to messages killed by a positive
+value of this attribute; those are lost forever).  </p><p>
+To stop logging, set <code class="varname">AIPS.log</code> to
+<code class="constant">None</code>.  </p></div></div></div></body></html>

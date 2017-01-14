@@ -1,0 +1,21 @@
+#! /bin/sh
+
+# Automake sets VERSION to something that confuses us.
+VERSION='31DEC13'
+
+if test -n "$AIPS_ROOT"; then
+  DADEVS_QUIET=YES
+  export DADEVS_QUIET
+
+  . $AIPS_VERSION/SYSTEM/UNIX/DADEVS.SH
+  . $AIPS_VERSION/SYSTEM/UNIX/PRDEVS.SH
+fi
+
+if test -z "$PYTHONPATH"; then
+    PYTHONPATH=@top_srcdir@/python:@OBIT_PYTHONPATH@
+else
+    PYTHONPATH=@top_srcdir@/python:@OBIT_PYTHONPATH@:$PYTHONPATH
+fi
+export PYTHONPATH
+
+exec @PYTHON@ "$@"

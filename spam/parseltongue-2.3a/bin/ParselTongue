@@ -1,0 +1,44 @@
+#! /bin/sh
+
+# Print version if requested.
+if test $# -gt 0; then
+  case $1 in
+  --version)
+    echo "ParselTongue 2.3"; exit 0 ;;
+  -V)
+    echo "ParselTongue 2.3" ;;
+  esac
+fi
+
+# If AIPS is available, make its data disks and printers available.
+if test -n "$AIPS_ROOT"; then
+  if test -z "$DADEVS_QUIET"; then
+      DADEVS_QUIET=YES
+      export DADEVS_QUIET
+  fi
+  . $AIPS_VERSION/SYSTEM/UNIX/DADEVS.SH
+  . $AIPS_VERSION/SYSTEM/UNIX/PRDEVS.SH
+fi
+
+# Make sure Python can find the ParselTongue modules.
+if test -z "$PYTHONPATH"; then
+    PYTHONPATH=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python
+else
+    PYTHONPATH=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python:$PYTHONPATH
+fi
+
+# Make sure Python can find the Obit modules.
+if test -z "$OBIT_PYTHONPATH"; then
+    OBIT_PYTHONPATH=/home/shubhankar/MachineLearning/spam/Obit/python
+else
+    OBIT_PYTHONPATH=$OBIT_PYTHONPATH:/home/shubhankar/MachineLearning/spam/Obit/python
+fi
+if test -n "${OBIT_PYTHONPATH+set}"; then
+    PYTHONPATH=$OBIT_PYTHONPATH:$PYTHONPATH
+fi
+
+# Run Parseltongue.py for interactive sessions
+PYTHONSTARTUP=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python/ParselTongue.py
+export PYTHONPATH PYTHONSTARTUP
+
+exec /usr/bin/python2.7 "$@"

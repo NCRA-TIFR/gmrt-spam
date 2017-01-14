@@ -1,0 +1,355 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ParselTongue Tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book"><div class="titlepage"><div><div><h1 class="title"><a name="idp4335456"></a><span class="application">ParselTongue</span> Tutorial</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Mark</span> <span class="surname">Kettenis</span></h3><div class="affiliation"><span class="orgname">JIVE<br></span></div></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="chapter"><a href="#idp4340752">1. Starting an interactive <span class="application">ParselTongue</span> session</a></span></dt><dt><span class="chapter"><a href="#idp4346160">2. Running <span class="application"><acronym class="acronym">AIPS</acronym></span> tasks</a></span></dt><dt><span class="chapter"><a href="#idp4379072">3. Array Indexing</a></span></dt><dt><span class="chapter"><a href="#idp4390784">4. Accessing <span class="application"><acronym class="acronym">AIPS</acronym></span> data</a></span></dt><dd><dl><dt><span class="section"><a href="#idp4412224">Headers</a></span></dt><dt><span class="section"><a href="#idp4420032">Tables</a></span></dt><dt><span class="section"><a href="#idp4431264">Convenience functions</a></span></dt><dt><span class="section"><a href="#idp4439712">Cleaning up</a></span></dt></dl></dd><dt><span class="chapter"><a href="#idp4453184">5. Scripts</a></span></dt><dt><span class="chapter"><a href="#idp4460848">6. Wizardry</a></span></dt></dl></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4340752"></a>Chapter 1. Starting an interactive <span class="application">ParselTongue</span> session</h1></div></div></div><p>
+For this tutorial we will use an interactive <span class="application">ParselTongue</span> session:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>ParselTongue</strong></span>
+Python 2.3.4 (#1, Oct  5 2004, 00:17:14) 
+[GCC 3.3.4 (pre 3.3.5 20040809)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+
+Welcome to ParselTongue
+Please enter your AIPS user ID number: <strong class="userinput"><code>3601</code></strong>
+<code class="prompt">&gt;&gt;&gt;</code>
+
+</pre><p>
+
+</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4346160"></a>Chapter 2. Running <span class="application"><acronym class="acronym">AIPS</acronym></span> tasks</h1></div></div></div><p>
+Use the <code class="classname">AIPSTask</code> class to run <span class="application"><acronym class="acronym">AIPS</acronym></span> tasks:
+
+</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+Create an instance for the task you want to run
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld = AIPSTask('fitld')</strong></span>
+</pre><p>
+</p></li><li class="listitem"><p>
+Set attributes (adverbs)
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.infile = '/tmp/4C39.25.FITS'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.clint = 0.33</strong></span>
+</pre><p>
+</p></li><li class="listitem"><p>
+Go!
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.go()</strong></span>
+...
+</pre><p>
+</p></li></ol></div><p>
+</p><p>
+Attributes are not shared between instances:
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld2 = AIPSTask('fitld')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print fitld.clint</strong></span>
+0.33
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print fitld2.clint</strong></span>
+0.0
+</pre><p>
+</p><p>
+<span class="application"><acronym class="acronym">AIPS</acronym></span> Tasks can return attributes:
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean = AIPSTask('imean')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inname = '4C39.25'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.inclass = 'ICL001'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.indisk = 1</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.go()</strong></span>
+...
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print imean.pixavg, imean.pixstd</strong></span>
+0.00019473816792 0.00434004655108
+</pre><p>
+</p><p>
+Output is logged to <code class="varname">AIPS.log</code> if you set it to a
+file-like object:
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>AIPS.log = open('/tmp/pt.log', 'a')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.go()</strong></span>
+...
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>for line in open('/tmp/pt.log'): print line,</strong></span>
+<code class="prompt">...</code>
+</pre><p>
+
+The verbosity of the output is controlled by
+<code class="varname">AIPSTask.msgkill</code>:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> &gt; 0 - Reduce output on both screen and log</p></li><li class="listitem"><p> &lt; 0 - Reduce output only on screen</p></li></ul></div><p>
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.msgkill = 2</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.go()</strong></span>
+...
+</pre><p>
+</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4379072"></a>Chapter 3. Array Indexing</h1></div></div></div><p>
+
+There are different array indexing conventions around:
+
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> <span class="application"><acronym class="acronym">AIPS</acronym></span> uses 1-based array indexing (like FORTRAN)</p></li><li class="listitem"><p> Python uses 0-based array indexing (like everyone else)</p></li></ul></div><p>
+
+Unfortunately 0-based indexing is very confusing for things like
+<code class="varname">APARM</code>.  Therefore <span class="application">ParselTongue</span> arrays used for task
+attributes are a bit special and have element 0 hardwired to
+<code class="varname">None</code>.
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc = AIPSList([256, 256])</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc[1:] = [256, 256]</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print imean.trc</strong></span>
+[None, 256.0, 256.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+</pre><p>
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>imean.trc[0] = 1</strong></span>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in ?
+  File "/export/jive/kettenis/opt/ParselTongue/share/parseltongue/python/Task.py", line 131, in __setitem__
+    raise ValueError, msg
+ValueError: setting element '0' is prohibited
+</pre><p>
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print PythonList(imean.trc)</strong></span>
+[256.0, 256.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+</pre><p>
+
+</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4390784"></a>Chapter 4. Accessing <span class="application"><acronym class="acronym">AIPS</acronym></span> data</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="#idp4412224">Headers</a></span></dt><dt><span class="section"><a href="#idp4420032">Tables</a></span></dt><dt><span class="section"><a href="#idp4431264">Convenience functions</a></span></dt><dt><span class="section"><a href="#idp4439712">Cleaning up</a></span></dt></dl></div><p>
+
+Use the <code class="classname">AIPSUVData</code> and
+<code class="classname">AIPSImage</code> classes to access the metadata
+associated with <span class="application"><acronym class="acronym">AIPS</acronym></span> UV data and images:
+
+</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+Create an instance for the data set you want to access:
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata = AIPSUVData('N03L1', 'UVDATA', 1, 1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image = AIPSImage('4C39.25', 'ICL001', 1, 1)</strong></span>
+</pre><p>
+</p></li></ol></div><p>
+
+Note that we refer to data sets by their name, class, disk and
+sequence number and not by its catalog number.
+</p><p>
+It is easy to check whether the data set actually exists in the AIPS catalog:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.exists()</strong></span>
+False
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.exists()</strong></span>
+True
+</pre><p>
+</p><p>
+These <span class="application">ParselTongue</span> data can be used conveniently when running <span class="application"><acronym class="acronym">AIPS</acronym></span> tasks:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld = AIPSTask('fitld')</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.infile = '/tmp/N03L1.IDI'</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.clint = 0.33</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.outdata = uvdata</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>fitld.go()</strong></span>
+...
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.exists()</strong></span>
+True
+</pre><p>
+</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4412224"></a>Headers</h2></div></div></div><p>
+You can access the header through the <code class="varname">header</code> attribute:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.header</strong></span>
+...
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.header.telescop</strong></span>
+'EVN     '
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.header</strong></span>
+...
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.header.date_obs</strong></span>
+'2005-03-01'
+</pre><p>
+
+Keywords are the same as for the <span class="application"><acronym class="acronym">AIPS</acronym></span> GETHEAD verb, but lower case
+with '-' replaced by '_'.
+</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4420032"></a>Tables</h2></div></div></div><p>
+What tables do we have?
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.tables</strong></span>
+[[1, 'AIPS HI'], [1, 'AIPS AT'], [1, 'AIPS NX'], [1, 'AIPS CL'], [1, 'AIPS FQ'], [1, 'AIPS AN'], [1, 'AIPS SU']]
+</pre><p>
+
+These tables can be opened for further analysis:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>sutable = uvdata.table('SU', 1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>for row in sutable:</strong></span>
+<code class="prompt">...</code> <span class="command"><strong>    print row.source, row.raapp, row.decapp</strong></span>
+<code class="prompt">...</code>
+3C84             49.9489485008 41.513581044
+DA193            88.8813073705 39.8151637728
+</pre><p>
+
+It is also possible to access individual rows directly:
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>cltable = uvdata.table('CL', 1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>print cltable[0]</strong></span>
+...
+</pre><p>
+</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4431264"></a>Convenience functions</h2></div></div></div><p>
+<span class="application">ParselTongue</span> includes some convenience functions that 
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.antennas</strong></span>
+['MC', 'WB', 'NT', 'JB']
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.sources</strong></span>
+['3C84', 'DA193']
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.polarizations</strong></span>
+['R', 'L']
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.stokes</strong></span>
+['RR', 'LL', 'RL', 'LR']
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.stokes</strong></span>
+['I']
+</pre><p>
+</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp4439712"></a>Cleaning up</h2></div></div></div><p>
+Finally when you're done you should clean up.  The following command
+removes the entire data set:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.zap()</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>image.exists()</strong></span>
+False
+</pre><p>
+
+It is also possible to remove individual tables:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.tables</strong></span>
+[[1, 'AIPS HI'], [1, 'AIPS AT'], [1, 'AIPS NX'], [1, 'AIPS CL'], [1, 'AIPS FQ'], [1, 'AIPS AN'], [1, 'AIPS SU']]
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.table('NX', 1).zap()</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.tables</strong></span>
+[[1, 'AIPS HI'], [1, 'AIPS AT'], [1, 'AIPS CL'], [1, 'AIPS FQ'], [1, 'AIPS AN'], [1, 'AIPS SU']]
+</pre><p>
+
+There is an alternative way for zapping tables that might come handy
+if you want to zap all tables of a particular type:
+
+</p><pre class="screen">
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.tables</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.zap_table('AT', -1)</strong></span>
+<code class="prompt">&gt;&gt;&gt;</code> <span class="command"><strong>uvdata.tables</strong></span>
+[[1, 'AIPS HI'], [1, 'AIPS CL'], [1, 'AIPS FQ'], [1, 'AIPS AN'], [1, 'AIPS SU']]
+</pre><p>
+</p></div></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4453184"></a>Chapter 5. Scripts</h1></div></div></div><p>
+In order to use <span class="application">ParselTongue</span> from scripts you'll need to import the
+appropriate <span class="application">ParselTongue</span> modules and set your <span class="application"><acronym class="acronym">AIPS</acronym></span> user number.  For the
+examples we have seen before, something like the following will
+suffice:
+
+</p><pre class="programlisting">
+from AIPS import AIPS
+from AIPSTask import AIPSTask, AIPSList
+from AIPSData import AIPSUVData, AIPSImage
+
+AIPS.userno = 3601
+</pre><p>
+
+Starting <span class="application">ParselTongue</span> scripts is easiest done by using the
+<span class="command"><strong>ParselTongue</strong></span> command:
+
+</p><pre class="screen">
+<code class="prompt">$</code> <span class="command"><strong>ParselTongue script.py</strong></span>
+</pre><p>
+
+This will start <span class="application">Python</span> with all the magic
+environment variables set.
+</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="idp4460848"></a>Chapter 6. Wizardry</h1></div></div></div><p>
+For Hogwarts graduates it is even possible to create new extension
+tables.  The following bit of code creates a new CL table with a
+different amplitude calibration:
+
+</p><pre class="programlisting">
+from AIPS import AIPS
+from Wizardry.AIPSData import AIPSUVData
+
+AIPS.userno = 3601
+
+data = AIPSUVData('N03L1', 'UVDATA', 1, 1)
+oldcl = data.table('CL', 1)
+
+newcl = data.attach_table('CL', 2, no_term=oldcl.keywords['NO_TERM'])
+newcl.keywords['NO_ANT'] = oldcl.keywords['NO_ANT']
+
+for row in oldcl:
+    row.real1 = [2 * x for x in row.real1]
+    row.real2 = [2 * x for x in row.real2]
+    newcl.append(row)
+
+newcl.close()
+oldcl.close()
+</pre><p>
+
+<code class="classname">Wizardry.AIPSUVData</code> is very similar to the
+normal <code class="classname">AIPSUVData</code> but is in a different module
+because it doesn't support remote executaion like
+<code class="classname">AIPSUVData</code> does.  Remote execution will be
+adressed later in this workshop.
+</p><p>
+It is also possible to change an existing table (although that is not
+very <span class="application"><acronym class="acronym">AIPS</acronym></span>-ish):
+
+</p><pre class="programlisting">
+from Wizardry.AIPSData import AIPSUVData
+from AIPS import AIPS
+
+AIPS.userno = 3602
+
+data = AIPSUVData('N03L1', 'UVDATA', 1, 1)
+table = data.table('CL', 1)
+
+for row in table:
+    row.real1 = [2 * x for x in row.real1]
+    row.real2 = [2 * x for x in row.real2]
+    row.update()
+
+table.close()
+</pre><p>
+</p><p>
+It's also possible to get at the actual visibilities in a UV data set.
+Here is a little script that uses
+<span class="application">matplotlib</span> to make a UV coverage plot:
+
+</p><pre class="programlisting">
+from Wizardry.AIPSData import AIPSUVData
+from AIPS import AIPS
+
+from pylab import plot, show
+
+AIPS.userno = 3601
+
+data = AIPSUVData('MULTI', 'UVDATA', 1, 3)
+u = []
+v = []
+for visibility in data:
+    u.append(visibility.uvw[0])
+    v.append(visibility.uvw[1])
+
+plot(u, v, '.')
+show()
+</pre><p>
+
+And here is a script that makes a plot of the phase for a single
+channel on a randomly chosen baseline:
+
+</p><pre class="programlisting">
+from Wizardry.AIPSData import AIPSUVData
+from AIPS import AIPS
+
+from pylab import plot, show
+from math import atan2
+
+AIPS.userno = 3601
+
+data = AIPSUVData('MULTI', 'UVDATA', 1, 3)
+phase = []
+time = []
+for visibility in data:
+    if visibility.baseline == [1, 2]:
+        re = visibility.visibility[0, 0, 0, 0]
+        im = visibility.visibility[0, 0, 0, 1]
+        phase.append(atan2(re, im))
+        time.append(visibility.time)
+
+plot(time, phase, '.')
+show()
+
+
+</pre><p>
+</p></div></div></body></html>

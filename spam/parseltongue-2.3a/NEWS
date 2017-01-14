@@ -1,0 +1,428 @@
+*** Changes in ParselTongue 2.3
+
+* New functionality
+
+It is now possible to slice visibilities in order to iterate over a
+subset of them:
+
+>>> for vis in uvdata[100:200]:
+>>>     print vis.time
+
+Strides other than one are not supported.
+
+ParselTongue now supports the new UV format introduced on March 24,
+2015 to support arrays with more than 256 antennas.  If you are using
+AIPS 31DEC15 or later, you should probably upgrade ParselTongue.
+
+* Bug fixes
+
+A bug that prevented attaching FG tables has been fixed.
+
+Raw visibility access has been optimized and is now (a bit) faster.
+
+
+*** Changes in ParselTongue 2.2
+
+* New functionality
+
+New intable pseudo-adverb allows setting the inext and invers adverbs
+directly from an AIPSTable object:
+
+>>> cl = uvdata.table('CL', 3)
+>>> prtab.intable = cl
+
+This is very similar to how the indata pseudo-adverb works.
+
+It is now possible to use ParselTongue with NumPy 1.9 and later versions.
+
+
+*** Changes in ParselTongue 2.1
+
+* New functionality
+
+It is now possible to use up to 35 AIPS tasks in parallel if your AIPS
+installation supports this.
+
+ParselTongue speeds up creating files by effectively always setting
+the AIPS QCREATE adverb to 1.
+
+ParselTongue now supports handling FG (flag) tables.
+
+Test suite has been updated to use the 31DEC13 AIPS release.
+
+* Bug fixes
+
+Fixed some issues when both numarray and numpy packages are present.
+
+Fixed many issues in the ParallelTask module.
+
+Numerous other small bug fixes.
+
+
+*** Changes in ParselTongue 2.0
+
+* New functionality
+
+It is now possible to access visibilities directly:
+
+>>> print uvdata[666].baseline
+[1, 6]
+
+AIPSLite, origionally developed by Stephen Bourke, has been integrated
+in ParselTongue.  AIPSLite allows you to run ParselTongue on machines
+that don't have AIPS installed.  This is especially useful for running
+AIPS on HPC clusters.  The following fragment:
+
+>>> import AIPSLite
+>>> AIPSLite.setup()
+
+will perform a very minimal installation of the current stable version
+of AIPS in your home directory.  Afterwards, whenever you try to run
+an AIPS task you haven't run before, it will download the task's
+executable on the fly.
+
+ParselTongue now supports using a local TV.
+
+* Bug fixes
+
+Several keyword-related issues have been fixed.
+
+
+*** Changes in ParselTongue 1.1.2
+
+* Changed functionality
+
+The choice between numarray and NumPy is now made at runtime.  If both
+modules are available, we prefer numarray but allow people to override
+the choice by letting them set the NUMERIX environment variable. So
+
+$ export NUMERIX=numpy
+$ ParselTongue
+
+will use NumPy if both numarray and NumPy are available.  This matches
+the behaviour of PyFITS.
+
+While it somewhat violates the AIPS philosophy, it is now also
+possible to change raw visibilities.  For example:
+
+>>> for vis in uvdata:
+>>>     vis.visibility[0][0][0][2] = 0.0
+>>>     vis.update()
+
+will change the weight of the first spectral channel of the first IF
+of the first polarisation to 0.0.
+
+
+*** Changes in ParselTongue 1.1.1
+
+* New functionality
+
+ParselTongue can now use either numarray or NumPy as its underlying
+array implementation to give access to visibilities and image pixels.
+The default is to use numarray; if you want to use NumPy you'll need
+to specifify --with-numpy when configuring ParselTongue.
+
+It is now possible to log the output of an individual task:
+
+>>> mandl = AIPSTask('MANDL')
+>>> mandl.log = open('mandl1.log','a')
+
+ParselTongue now has same low-level functionality to run tasks in
+parallel.  To make this new functionality useful there is a new
+ParselFileServer which assists in moving data between AIPS
+installations.  For more information, see The Codex ParselTongue
+<http://www.jive.nl/parseltongue/codex.html>.
+
+The Codex ParselTongue now also documents the way to run "external"
+AIPS tasks.
+
+
+*** Changes in ParselTongue 1.0.6
+
+* New functionality
+
+It is now possible to change pixel values in an image:
+
+>>> from Wizardry.AIPSData import AIPSImage as WizAIPSImage
+>>> image = WizAIPSImage('4C39.25', 'ICL001', 1, 1)
+>>> image.squeeze()
+>>> image.pixels[0][0] = 0
+>>> image.update()
+
+Adding new keywords now works:
+
+>>> from Wizardry.AIPSData import AIPSImage as WizAIPSImage
+>>> image = WizAIPSImage('4C39.25', 'ICL001', 1, 1)
+>>> image.keywords['PI'] = 3.14159
+>>> image.keywords.update()
+
+In addition to help() there is now also explain() which gives a
+verbose explanation of most AIPS tasks.
+
+* Bug fixes
+
+Rename operations that specify zero as the new sequence number, now
+correctly update the secuency number.
+
+
+*** Changes in ParselTongue 1.0.5
+
+* New functionality
+
+The so called "random parameters" associated with each visibility can
+now be changed:
+
+>>> for vis in uvdata:
+...   vis.weight *= 2
+...   vis.uvw = [-x for x in vis.uvw]
+...   vis.update()
+
+Changing the raw visibilities themselves is still not possible.
+
+Also, you no lomger need to guess what keywords are attached to a data
+set or table:
+
+>>> image = AIPSImage('4C39.25', 'ICL001', 1, 1)
+>>> image.keywords
+{'ZENANGLE': 20.997356414794922, 'PARANGLE': -49.165603637695312}
+
+It's also possible to change keywords on data sets now:
+
+>>> from Wizardry.AIPSData import AIPSImage as WizAIPSImage
+>>> image = WizAIPSImage('4C39.25', 'ICL001', 1, 1)
+>>> image.keywords['ZENANGLE'] = 21
+
+Don't forget to update the keywords to make the changes permamnent:
+
+>>> image.keywords.update()
+
+It's now easier to use Wizardry functionality on "normal" datasets,
+since you can convert one into the other:
+
+>>> from Wizardry.AIPSData import AIPSImage as WizAIPSImage
+>>> image = AIPSImage('4C39.25', 'ICL001', 1, 1)
+>>> wiz_image = WizAIPSImage(image)
+>>> image = AIPSImage(wiz_image)
+
+There's also a new AIPSCat class that allows you to access the AIPS
+catalog:
+
+>>> print AIPSCat()
+Catalog on disk  1
+ Cat Mapname      Class   Seq  Pt     Last access
+   1 4C39.25     .ICL001.    1 MA 19-May-2006 09:50:43
+Catalog on disk  2
+ Cat Mapname      Class   Seq  Pt     Last access
+
+It can be used to zap multiple files in one go:
+
+>>> AIPSCat(2).zap(klass='SUBIM')
+
+will zap all files with class 'SUBIM' on AIPS disk 2.
+
+ParselTongue can now deal with interactive AIPS tasks.
+
+* Bug fixes
+
+Better limits on disk, box and channel adverbs.
+
+Better support for "experimental" adverbs.
+
+Default values for array adverbs should stay constant now.
+
+
+*** Changes in ParselTongue 1.0.4
+
+* New functionality
+
+Modifying headers of images and UV data should work now:
+
+>>> from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
+>>> uvdata = WizAIPSUVData('N05C2', 'UVDATA', 1, 1)
+>>> uvdata.header.date_map = '2006-04-05'
+
+Don't forget to update the header to make the changes permanent:
+
+>>> uvdata.header.update()
+
+It is now possible to construct instances of the Wizardry classes from
+non-Wizardry instances and vice versa:
+
+>>> from Wizardry.AIPSData import AIPSUVData as WizAIPSUVData
+>>> data = AIPSUVData('N05C2', 'UVDATA', 1, 1)
+>>> wizdata = WizAIPSUVData(data)
+>>> data2 = AIPSUVData(wizdata)
+
+* Bug fixes
+
+Opening the highest version of an extension table of an image should
+works now.
+
+
+*** Changes in ParselTongue 1.0.3
+
+* New functionality
+
+Attaching CC tables to images should work now.  By default, a table
+for point source models is created:
+
+>>> image.attach_table('CC', 0)
+
+For gaussian models (used for multi-scale CLEAN) you have to do
+
+>>> image.attach_table('CC', 0, no_parms=4)
+
+However, it is not clear whether AIPS reads tables created with
+no_parms=4 correctly.
+
+AIPSData.zap() has been changed such that you can now forcefully zap
+data that's still marked as busy:
+
+>>> uvdata.zap(force=True)
+
+ParselTongue will now display its version number when starting an
+interactive session or when invoking ParselTongue with the --version
+option.
+
+* Bug fixes
+
+ParselTongue will no longer zap tables from data that's still marked
+as busy (unless you specify force=True of course).
+
+
+*** Changes in ParselTongue 1.0.2
+
+* New functionality
+
+CLRSTAT-like functionality is now implemented.  If an AIPS task falls
+over and leaves a data set in a READ or WRITE state, you can use:
+
+>>> uvdata = AIPSUVData('MULTI', 'UVDATA', 1, 1)
+>>> uvdata.clrstat()
+
+to clear all status flags.
+
+* Bug fixes
+
+Setting adverbs that are multi-dimensional arrays (like DOWIDTH for
+SAD) should work correctly now.
+
+Pathnames specified for INFILE2, OFMFILE, BOXFILE and OBOXFILE can now
+be longer than 48 characters, just like INFILE, OUTFILE and OUTPRINT.
+
+*** Changes in ParselTongue 1.0.1
+
+* Bug fixes
+
+ParselTongue will now deal gracefully with missing readline support in
+Python.  The AIPSUVData.antennas, AIPSUVData.polarizations and
+AIPSUVData.sources attributes no longer incorrectly cache their
+results.
+
+Obit no longer leaks huge amounts of memory, can now access FG tables
+and now produces CL tables that no longer confuse AIPS.
+
+* New functionality
+
+Dictonary-like access to table rows is now possible, and
+
+>>> uvdata = AIPSUVData('MULTI', 'UVDATA', 1, 1)
+>>> print len(uvdata)
+
+prints the number of visibilities in the data set.
+
+*** Changes in ParselTongue 1.0
+
+* Renaming data sets
+
+It is now possible to rename images and UV data:
+
+>>> uvdata = AIPSUVData('MULTI', 'UVDATA', 1, 1)
+>>> uvdata.rename('N05C2', 'UVDATA', 1, 1)
+
+* History access
+
+You can now access the history table of a data set:
+
+>>> print uvdata.history[6]
+
+will print the 7th record in the history.
+
+* Changing keywords
+
+It is now possible to change non-standard keywords:
+
+>>> uvdata.keywords['OLDFRQ'] = 1.64249000e9
+
+will set the keyword 'OLDFRQ' to 1.6 GHz.  This also works for tables,
+but make sure you close the table explicitly when you're done with it,
+otherwise you'll lose the change:
+
+>>> antable.keywords['ARRNAM'] = 'EVN'
+>>> antable.close()
+
+
+*** Changes in ParselTongue 0.99
+
+* Support for the AIPS TV
+
+It is now possible to run AIPS tasks that use the AIPS TV, provided
+the AIPS TV is running on the local machine and it is set up to use
+internet sockets for communication with AIPS tasks.  A TVServer script
+to start the AIPS TV server is provided.  Some limited support to
+control the TV from ParselTongue is also included:
+
+>>> tv = AIPSTV()
+>>> tv.start()
+
+will start the AIPS TV from ParselTongue
+
+>>> tv.clear()
+
+will clear the AIPS TV ("TVINIT").
+
+>>> tv.kill()
+
+will close down the AIPS TV in a somewhat gracefull way.
+
+* Support for more AIPS disks
+
+ParselTongue now supports up to 35 AIPS disks.
+
+
+*** Changes in ParselTongue 0.97
+
+* Interface changes
+
+AIPSUVData.header, AIPSImage.header, AIPSUVData.tables and
+AIPSImage.tables are now properties of the data set.  The header
+property has its own attributes.  The names of these attributes match
+the names used by AIPS' GETHEAD and PUTHEAD verbs.  So instead of:
+
+>>> print AIPSImage.header()['OBSDAT']
+>>> print AIPSUVData.tables()
+
+you now should use:
+
+>>> print AIPSImage.header.date_obs
+>>> print AIPSUVData.tables
+
+
+AIPSTable.header should no longer be used since a much better syntax
+now exists to deal with tables.  So instead of:
+
+    sutable = uvdata.table('AIPS SU', 0)
+    suheader = sutable.header()
+    nrow = suheader['nrow']
+    for rowno in xrange(1, nrow + 1):
+        row = sutable.getrow(rowno)
+        print row['SOURCE'][0].strip()
+
+you now should use:
+
+    sutable = uvdata.table('SU', 0)
+    for row in sutable:
+        print row.source.strip()
+
+
+This should make the ParselTongue interface much more consistent.

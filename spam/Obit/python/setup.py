@@ -1,0 +1,10 @@
+from distutils.core import setup, Extension
+setup( name="Obit", version="1.0",
+       ext_modules=[Extension("Obit",
+                              ['Obit_wrap.c'],
+                              extra_compile_args=['-DPACKAGE_NAME="Obit"', '-DPACKAGE_TARNAME="obit"', '-DPACKAGE_VERSION="1.0"', '-DPACKAGE_STRING="Obit_1.0"', '-DPACKAGE_BUGREPORT="bcotton@nrao.edu"', '-DPACKAGE="obit"', '-DVERSION="1.0"', '-DSTDC_HEADERS=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_STRING_H=1', '-DHAVE_MEMORY_H=1', '-DHAVE_STRINGS_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_UNISTD_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_STRING_H=1', '-DHAVE_UNISTD_H=1', '-DHAVE_SSE=1', '-DHAVE__TMP_DUMMY2_FITSIO_H=1', '-DHAVE_LIBCFITSIO=1', '-DHAVE_CFITSIO=1', '-DHAVE__TMP_DUMMY1_FFTW3_H=1', '-DHAVE_FFTW3=1', '-DHAVE__TMP_DUMMY1_GSL_H=1', '-DHAVE_GSL=1', '-DHAVE__TMP_DUMMY1_ZLIB_H=1', '-DHAVE_ZLIB=1', '-DHAVE_PGPLOT=1', '-DHAVE_PYTHON=1', '-DHAVE_FSEEKO=1', '-DOBIT_THREADS_ENABLED=1'],
+                              library_dirs=['../lib', '/usr/lib/gcc/x86_64-redhat-linux/4.9.2', '/usr/lib/gcc/x86_64-redhat-linux/4.9.2/../../../../lib64', '/lib/../lib64', '/usr/lib/../lib64', '/usr/lib/gcc/x86_64-redhat-linux/4.9.2/../../..', '../dummy_xmlrpc', '../dummy_xmlrpc', '/usr/lib/python2.7/site-packages', '../dummy_xmlrpc', '../dummy_xmlrpc'],
+                              libraries=['Obit', 'Obit', 'cfitsio', 'fftw3f', 'glib-2.0', 'gsl', 'gslcblas', 'cpgplot', 'pgplot', 'SM', 'ICE', 'X11', 'gfortran', 'm', 'quadmath', 'gthread-2.0', 'pthread', 'glib-2.0', 'z', 'xmlrpc', 'xmlrpc'],
+                              runtime_library_dirs=[])],
+       include_dirs=['/usr/include/glib-2.0', '/usr/lib64/glib-2.0/include', '../include', '/usr/include/cfitsio', '/usr/include', '/usr/include', '../dummy_xmlrpc', '../dummy_xmlrpc']
+)
