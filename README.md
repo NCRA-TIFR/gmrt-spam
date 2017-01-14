@@ -28,8 +28,9 @@ Make sure that the following dependencies have been met. If not install, and the
 
 ## Install AIPS
 
-1. Change the working directory to 'ROOTPATH/spam/AIPS'
-2. Run the command 'perl install.pl -n'
+1. Change the working directory to 'ROOTPATH/spam/'
+2. Extract the AIPS package (run the command "tar -xvf 'name of the AIPS package'")
+3. Run the command 'perl install.pl -n'
 
 To quickly get through the AIPS installation:
 > screen 0: <enter>
@@ -46,9 +47,9 @@ To quickly get through the AIPS installation:
 > screen 11: <2x enter>
 > during installation: <3x enter>
 
-3. We will now increase the number of interactive AIPS sessions to 16. Type the following command 'source LOGIN.SH'
-4. Run the following command 'RUN SETPAR' 
-5. Within SETPAR
+4. We will now increase the number of interactive AIPS sessions to 16. Type the following command 'source LOGIN.SH'
+5. Run the following command 'RUN SETPAR' 
+6. Within SETPAR
 
 > 2 <enter>
 > 10 <enter>
@@ -58,8 +59,8 @@ When prompted to enter passsword:
 > AMANAGER <enter>
 > 4 <enter>
 
-6. Test AIPS by running aips tv=local.
-7. Press enter in the terminal, and then enter a few test commands i.e.
+7. Test AIPS by running aips tv=local.
+8. Press enter in the terminal, and then enter a few test commands i.e.
 
 > 11 <enter>
 > print 2+2 <enter>
