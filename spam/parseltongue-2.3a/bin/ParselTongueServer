@@ -7,4 +7,4 @@ else
     parseltongue=ParselTongue
 fi
 
-exec $parseltongue /home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python/XMLRPCServer.py
+exec $parseltongue /data2/shubhankar/gmrt-spam/spam/ParselTongue/share/parseltongue/python/XMLRPCServer.py

@@ -22,23 +22,23 @@ fi
 
 # Make sure Python can find the ParselTongue modules.
 if test -z "$PYTHONPATH"; then
-    PYTHONPATH=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python
+    PYTHONPATH=/data2/shubhankar/gmrt-spam/spam/ParselTongue/share/parseltongue/python
 else
-    PYTHONPATH=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python:$PYTHONPATH
+    PYTHONPATH=/data2/shubhankar/gmrt-spam/spam/ParselTongue/share/parseltongue/python:$PYTHONPATH
 fi
 
 # Make sure Python can find the Obit modules.
 if test -z "$OBIT_PYTHONPATH"; then
-    OBIT_PYTHONPATH=/home/shubhankar/MachineLearning/spam/Obit/python
+    OBIT_PYTHONPATH=/data2/shubhankar/gmrt-spam/spam/Obit/python
 else
-    OBIT_PYTHONPATH=$OBIT_PYTHONPATH:/home/shubhankar/MachineLearning/spam/Obit/python
+    OBIT_PYTHONPATH=$OBIT_PYTHONPATH:/data2/shubhankar/gmrt-spam/spam/Obit/python
 fi
 if test -n "${OBIT_PYTHONPATH+set}"; then
     PYTHONPATH=$OBIT_PYTHONPATH:$PYTHONPATH
 fi
 
 # Run Parseltongue.py for interactive sessions
-PYTHONSTARTUP=/home/shubhankar/MachineLearning/spam/ParselTongue/share/parseltongue/python/ParselTongue.py
+PYTHONSTARTUP=/data2/shubhankar/gmrt-spam/spam/ParselTongue/share/parseltongue/python/ParselTongue.py
 export PYTHONPATH PYTHONSTARTUP
 
-exec /usr/bin/python2.7 "$@"
+exec /usr/bin/python "$@"
