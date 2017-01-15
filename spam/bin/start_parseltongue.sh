@@ -277,7 +277,7 @@ else
   PYTHONSTARTUP=${PT_PYTHONPATH}/ParselTongue.py
   export PYTHONSTARTUP
   echo ${PYTHON} ${PYTHONSTARTUP} 
-	${PYTHON} -c 'print(2)'
+	${PYTHON} 
 fi
 
 # cleanup and exit
