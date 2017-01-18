@@ -27,39 +27,39 @@ scriptpath=`dirname $0`
 # print welcome message
 if [ $# -le 2 ]
 then
-  echo ${scriptname} ": Startup script for ParselTongue"
+	echo ${scriptname} ": Startup script for ParselTongue"
 fi
 
 # check if MS directory name is given
 if [ $# -lt 2 ]
 then
-  echo "Usage : " ${scriptname} " working_directory aips_user_id [script.py]"
-  echo "  working_directory: directory that contains the following AIPS directories"
-  echo "    /workx : AIPS working directories where x = 01 to 32"
-  echo "    /runfil: directory that contains AIPS runfiles"
-  echo "    /prtfil: directory for AIPS printfiles"
-  echo "    /fits  : directory that contains fits files"
-  echo "  aips_user_id: AIPS user ID"
-  echo "  script.py: name of python script (path relative to working dir)"
-  exit 1
+	echo "Usage : " ${scriptname} " working_directory aips_user_id [script.py]"
+	echo "  working_directory: directory that contains the following AIPS directories"
+	echo "    /workx : AIPS working directories where x = 01 to 32"
+	echo "    /runfil: directory that contains AIPS runfiles"
+	echo "    /prtfil: directory for AIPS printfiles"
+	echo "    /fits  : directory that contains fits files"
+	echo "  aips_user_id: AIPS user ID"
+	echo "  script.py: name of python script (path relative to working dir)"
+	exit 1
 fi
 
 # check max. number of arguments
 if [ $# -gt 10 ]
 then
-  echo "  ERROR: too many arguments"
-  exit 1
+	echo "  ERROR: too many arguments"
+	exit 1
 fi
 
 # check if working directory exists
 if ( ! [ $1 = "." ] )
 then
-  if ( ! [ -d $1 ] )
-  then
-#    echo "  ERROR: Cannot find working_directory" $1
-#    exit 1
-    mkdir -p $1
-  fi
+	if ( ! [ -d $1 ] )
+	then
+		#    echo "  ERROR: Cannot find working_directory" $1
+		#    exit 1
+		mkdir -p $1
+	fi
 fi
 
 # set AIPS userno in system variable
@@ -79,8 +79,8 @@ cadname="CAD000000."${ehex}";"
 da00_dir="da00"
 if ( ! [ -d ${da00_dir} ] )
 then
-  mkdir -p ${da00_dir}
-  cp -f ${AIPS_ROOT}/DA00/${SPAM_HOST}/* ${da00_dir}
+	mkdir -p ${da00_dir}
+	cp -f ${AIPS_ROOT}/DA00/${SPAM_HOST}/* ${da00_dir}
 fi
 
 # check AIPS working directories
@@ -88,46 +88,46 @@ x=1
 x_max=35
 while [ $x -le $x_max ]
 do
-  if [ $x -ge 10 ]
-  then
-    workdir="work"$x
-  else
-    workdir="work0"$x
-  fi
-  if ( ! [ -d ${workdir} ] )
-  then
-    mkdir ${workdir}
-    touch ${workdir}/SPACE
-    cp ${scriptpath}/'CAD000000.001;' ${workdir}/
-    cp ${scriptpath}/'CAD000000.001;' ${workdir}/${cadname}
-  else
-    if ( ! [ -f ${workdir}/'CAD000000.001;' ] )
-    then
-      cp ${scriptpath}/'CAD000000.001;' ${workdir}/
-    fi
-    if ( ! [ -f ${workdir}/${cadname} ] )
-    then
-      cp ${scriptpath}/'CAD000000.001;' ${workdir}/${cadname}
-    fi
-  fi
-  x=`expr $x + 1`
+	if [ $x -ge 10 ]
+	then
+		workdir="work"$x
+	else
+		workdir="work0"$x
+	fi
+	if ( ! [ -d ${workdir} ] )
+	then
+		mkdir ${workdir}
+		touch ${workdir}/SPACE
+		cp ${scriptpath}/'CAD000000.001;' ${workdir}/
+		cp ${scriptpath}/'CAD000000.001;' ${workdir}/${cadname}
+	else
+		if ( ! [ -f ${workdir}/'CAD000000.001;' ] )
+		then
+			cp ${scriptpath}/'CAD000000.001;' ${workdir}/
+		fi
+		if ( ! [ -f ${workdir}/${cadname} ] )
+		then
+			cp ${scriptpath}/'CAD000000.001;' ${workdir}/${cadname}
+		fi
+	fi
+	x=`expr $x + 1`
 done
 if ( ! [ -f 'work01/MSD001000.001;' ] )
 then
-  cp ${scriptpath}/'MSD001000.001;' work01
+	cp ${scriptpath}/'MSD001000.001;' work01
 fi
 
 # create .dadevs file in home directory
 if [ -f ${HOME}/.dadevs ]
 then
-  mv -f ${HOME}/.dadevs ${HOME}/.dadevs_last
+	mv -f ${HOME}/.dadevs ${HOME}/.dadevs_last
 fi
 touch ${HOME}/.dadevs
 ls -1 -d work* > wworkdirs.txt
 workcount=`wc wworkdirs.txt | awk '{print $1}'`
 cat wworkdirs.txt | while read workdir
 do
-  echo "+  "${currentdir}"/"${workdir} >> ${HOME}/.dadevs
+	echo "+  "${currentdir}"/"${workdir} >> ${HOME}/.dadevs
 done
 rm -f wworkdirs.txt
 
@@ -135,34 +135,34 @@ rm -f wworkdirs.txt
 runfildir='runfil'
 if ( ! [ -d ${runfildir} ] )
 then
-  mkdir ${runfildir}
+	mkdir ${runfildir}
 fi
 
 # create prtfile directory
 prtfildir='prtfil'
 if ( ! [ -d ${prtfildir} ] )
 then
-  mkdir ${prtfildir}
+	mkdir ${prtfildir}
 fi
 
 # create fits directory
 fitsdir='fits'
 if ( ! [ -d $fitsdir ] ) then
-  mkdir $fitsdir
+	mkdir $fitsdir
 fi
 
 # create data directory
 datfildir='datfil'
 if ( ! [ -d ${datfildir} ] )
 then
-  mkdir ${datfildir}
+	mkdir ${datfildir}
 fi
 
 # create python directory
 pythondir=${currentdir}/python
 if ( ! [ -d ${pythondir} ] )
 then
-  mkdir ${pythondir}
+	mkdir ${pythondir}
 fi
 
 # set AIPS environment
@@ -240,56 +240,22 @@ DA35=${currentdir}/work35; export DA35
 # add directories to python search path
 PYTHONPATH=${pythondir}:${PYTHONPATH}; export PYTHONPATH
 
-# start parseltongue
-if [ $# -ge 3 ]
-then
-  if [ $3 == "debug" ]
-  then
-    . ${AIPS_VERSION}/SYSTEM/UNIX/DADEVS.SH
-#    . ${AIPS_VERSION}/SYSTEM/UNIX/PRDEVS.SH
-#    OBIT_PYTHONPATH=${SPAM_PATH}/Obit/python
-#    PYTHONPATH=$PYTHONPATH:${SPAM_PATH}/Obit/python
-#    export PYTHONPATH
-    PYTHONSTARTUP=${SPAM_PATH}/ParselTongue/share/parseltongue/python/ParselTongue.py
-    export PYTHONSTARTUP
-    gdb ${PYTHON}
-#  else
-#    if [ $3 == "test" ]
-#    then
-#      . ${AIPS_VERSION}/SYSTEM/UNIX/DADEVS.SH
-#      . ${AIPS_VERSION}/SYSTEM/UNIX/PRDEVS.SH
-##      OBIT_PYTHONPATH=${SPAM_PATH}/Obit/python
-##      PYTHONPATH=$PYTHONPATH:${OBIT_PYTHONPATH}
-##      export PYTHONPATH
-#      PYTHONSTARTUP=${PT_PYTHONPATH}/ParselTongue.py
-#      export PYTHONSTARTUP
-#      ${PYTHON}
-  else
-#    ParselTongue -V $3 $4 $5 $6 $7 $8 $9 $10
-  PYTHONSTARTUP=${PT_PYTHONPATH}/ParselTongue.py
-  export PYTHONSTARTUP
-#  echo ${PYTHON} ${PYTHONSTARTUP} 
-  ${PYTHON} $3 $4 $5 $6 $7 $8 $9 $10
-  fi
-else
 #  ParselTongue
-  . ${AIPS_VERSION}/SYSTEM/UNIX/DADEVS.SH
-  PYTHONSTARTUP=${PT_PYTHONPATH}/ParselTongue.py
-  export PYTHONSTARTUP
-  echo ${PYTHON} ${PYTHONSTARTUP} 
-	${PYTHON} 
-fi
+. ${AIPS_VERSION}/SYSTEM/UNIX/DADEVS.SH
+PYTHONSTARTUP=${PT_PYTHONPATH}/ParselTongue.py
+export PYTHONSTARTUP
+echo ${PYTHON} ${PYTHONSTARTUP} 
+${PYTHON} $3
 
 # cleanup and exit
 if [ -d ${HOME}/.matplotlib/tex-cache ]
 then
-  rm -f ${HOME}/.matplotlib/tex-cache/*
+	rm -f ${HOME}/.matplotlib/tex-cache/*
 fi
 
 cd ${startdir}
 
 if [ $# -le 2 ]
 then
-  echo "Done"
+	echo "Done"
 fi
-
